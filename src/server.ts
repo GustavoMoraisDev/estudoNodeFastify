@@ -22,9 +22,8 @@
 // npx tsx src/server.ts
 
 import fastify from 'fastify'
-import crypto from 'node:crypto'
-import { knex } from './database.js';
-import { title } from 'node:process';
+import { knex } from './database.js'
+import { env } from './env/index.js'
 
 const app = fastify()
 
@@ -44,7 +43,7 @@ app.get('/hello', async() => {
 // App.listen para nosso servidor ouvir uma rota
 app
   .listen({
-    port: 3333,
+    port: env.PORT,
     // listen retorna uma promise do JS e para sabermos quando finalizou essa promise usamos then
   })
   .then(() => console.log('HTTP Server Running!'))

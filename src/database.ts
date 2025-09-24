@@ -1,21 +1,21 @@
-// src/database.ts
 
-import knex from "knex";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-// Corrija o caminho para navegar apenas um nível acima (de `src` para `02-API-REST`)
-const dbPath = path.resolve(__dirname, '..', 'tmp', 'app.db');
 
-const setupKnex = knex({
-  client: 'sqlite3',
+import setupKnex from "knex";
+import type { Knex } from "knex";
+import { env } from "./env/index.js";
+
+export const config: Knex.Config = {
+  client: "sqlite3", // aqui precisa ser sqlite3
   connection: {
-    filename: dbPath,
+    filename: env.DATABASE_URL,
   },
-  useNullAsDefault: true
-});
+  useNullAsDefault: true,
+  migrations: {
+    extension: "ts",
+    directory: "./db/migrations",
+  },
+};
 
-export { setupKnex as knex };
+export const knex = setupKnex(config);
