@@ -4,41 +4,24 @@
 // Runtime Type Checking
 // Static Type Checking
 
-// Tipagem para remoção de "Erros"
-// interface User {
-//     birthYear: number
-// }
 
-// function calcularAIdadeDoUsuario(user: User) {
-//     return new Date().getFullYear() - user.birthYear
-// }
-
-// calcularAIdadeDoUsuario({
-//     birthYear: 1994
-// })
-
-// console.log(calcularAIdadeDoUsuario)
-
-// npx tsx src/server.ts
 
 import fastify from 'fastify'
 import { knex } from './database.js'
 import { env } from './env/index.js'
+import { transactionsRoutes } from './routes/transactions.js'
+import { transactionsGet } from './routes/consultTransactions.js'
 
 const app = fastify()
 
-// Com o app que está recebendo fastify podemos criar rotas da seguinte forma:
-// com app. já temos os tipos de métodos que podemos selecionar
-// O Primeiro parametro que incluimos é a rota final
-// O Segundo é a função e o return da rota
-app.get('/hello', async() => {
-  const transactions = await knex('transactions')
-  .where('amount', 1000)
-  .select('*')
+app.register(transactionsRoutes, {
+  prefix: 'transactions',
+} )
 
-  return transactions
-
+app.register(transactionsGet, {
+  prefix: 'transactions',
 })
+
 
 // App.listen para nosso servidor ouvir uma rota
 app
