@@ -10,17 +10,13 @@ import fastify from 'fastify'
 import { knex } from './database.js'
 import { env } from './env/index.js'
 import { transactionsRoutes } from './routes/transactions.js'
-import { transactionsGet } from './routes/consultTransactions.js'
+
 
 const app = fastify()
 
 app.register(transactionsRoutes, {
   prefix: 'transactions',
 } )
-
-app.register(transactionsGet, {
-  prefix: 'transactions',
-})
 
 
 // App.listen para nosso servidor ouvir uma rota

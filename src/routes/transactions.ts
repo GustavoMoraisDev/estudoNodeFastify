@@ -3,6 +3,7 @@ import { z } from "zod"
 import {knex} from "../database.js"
 import { id } from "zod/locales"
 import { randomUUID } from "crypto"
+import { request } from "http"
 
 
 
@@ -16,6 +17,42 @@ export async function transactionsRoutes(app: FastifyInstance) {
 // request ou reply é a Requisição da rota e podemos acessar mutiso parametros dela
 // Exemple: request.body = Pego o body completo que veio daquela requisição
 
+// rota get para retornar todas as transactions
+app.get('/', async() => {
+  const transactions = await knex('transactions').select()
+
+  return {transactions}
+})
+
+// rota get para retornar transaction seleciodas pelo id do params
+app.get('/:id', async (request, reply) => {
+  const getTransactionParamsSchema = z.object({
+    id: z.string().uuid(),
+  })
+
+  // validadando os parametros
+  const { id } = getTransactionParamsSchema.parse(request.params)
+
+  // buscando a transação no banco
+  const transaction = await knex('transactions').where('id', id).first()
+
+
+ if (!transaction) {
+      return reply.status(404).send({ error: "Transaction não encontrada" });
+    }
+
+  
+  return {transaction}
+})
+
+app.get('/sumary', async() => {
+  const summary = await knex('transactions').sum('amount', {as: 'Valor total transacionado'}).first()
+  return { summary}
+})
+
+
+
+// rota post para criar novas transações
 app.post('/', async(request, reply) => {
  
   // definindo o modelo de request.body com zod
@@ -35,6 +72,7 @@ app.post('/', async(request, reply) => {
     id: randomUUID(),
     title,
     amount: type === 'credit' ? amount : amount * -1,
+
   })
 
 
