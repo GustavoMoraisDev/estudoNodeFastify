@@ -6,16 +6,12 @@
 
 
 
-
- 
- 
  // RF - Requisitos Funcionais
  // O Usuário deve conseguir criar
  - [x] O usuário deve poder criar uma nova transação
  - [] O usuário deve poder obter um resumo da sua conta
  - [x] O usuário deve poder listar todas as transações que ocorreram
  - [x] O usuário deve poder visualizar uma transação unica
-
 
 
 
@@ -27,11 +23,8 @@
 
 
 
-
-
  // RNF - Requisitos Não Funcionais
  // Como vamos atingir isso, quais tecnologias vamos usar e as estratégias
-
 
 
 
